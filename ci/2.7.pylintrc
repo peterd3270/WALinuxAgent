@@ -120,3 +120,7 @@ ignore-docstrings=yes
 
 # Ignore imports when computing similarities.
 ignore-imports=no
+
+# override locals and branches check
+max-locals=20
+max-branches=21

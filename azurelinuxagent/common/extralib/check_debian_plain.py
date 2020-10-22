@@ -4,7 +4,8 @@
 #######################################################################
 # 2020-10-21 : changes to fix travis build failures
 #######################################################################
-import sys
+# pylint complains about this not being used:
+# import sys
 import platform
 import os
 import re
@@ -14,7 +15,9 @@ import io
 # move to inside check_debian_plain() - seems to work then.
 # from azurelinuxagent.common import logger
 
-def check_debian_plain(distinfo={}):
+# def check_debian_plain(distinfo={}):
+# fix pylint complaint about "dangerous default"
+def check_debian_plain(distinfo=None):
 # objectives:
 #   - figure out whether we're in debian or devuan
 #   - python-version-agnostic
@@ -33,7 +36,7 @@ def check_debian_plain(distinfo={}):
 #     (Q: why _Release in debian and _InRelease in devuan?)
 #   - take the first file found
 #   - extract the required info from the top of the file
-# TODO:
+# things to bear in mind:
 #   - what if we can't find the files? Need to return something
 #     which won't break what comes after.
 #   - possible problem with initial-capitalization of ID
@@ -98,7 +101,7 @@ def check_debian_plain(distinfo={}):
 #
         logger.error("check_debian_plain: WARNING: did not find sources.list file")
         return localdistinfo
-# FIXME: some tests throw up "unclosed file" warnings here. Apparently,
+# some tests throw up "unclosed file" warnings here. Apparently,
 # in python3, this use of open() is deprecated in favour of "with ..."
 # substitute io.open() for open() to give python v2/v3 compatibility:
 #   slfile=open("/etc/apt/sources.list","r")
@@ -118,7 +121,7 @@ def check_debian_plain(distinfo={}):
 # (why was a syntax error not being flagged up for this?)
 # Maybe this will fix the unclosed file error?
     slfile.close()
-    sline=sline.strip();
+    sline=sline.strip()
     if sline=="":
 # couldn't find an appropriate line - give up
         logger.error("check_debian_plain: unable to find useful line in sources.list")
@@ -131,12 +134,17 @@ def check_debian_plain(distinfo={}):
     tokenlist=sline.split(' ')
     url=tokenlist[1]
     codename=tokenlist[2]
-    domain=tokenlist[3]
+# pylint doesn't like the fact that this is unused (apart from here)
+#   domain=tokenlist[3]
 # extract the host and dir from the url:
-    parts=re.search('^http:\/\/(.*?)\/(.*)',url)
+#   parts=re.search('^http:\/\/(.*?)\/(.*)',url)
+# (pylint wibbles about "anomalous backslashes" - using r prefix instead)
+    parts=re.search(r'^http://(.*?)/(.*)',url)
     host=parts.group(1)
     section=parts.group(2)
-    if re.search('\/$',section):
+#   if re.search('\/$',section):
+# (pylint wibble ditto above)
+    if re.search(r'/$',section):
         section=section[:-1]
 # assemble the speculative filename
 # apparently if it's devuan, the file will end in _InRelease,
