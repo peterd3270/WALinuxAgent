@@ -208,7 +208,9 @@ def test():
 # (disabling the check: the whole point of this code is to work around deficiencies
 # in the python and debian/devuan distro checking: when these are fixed, this 
 # code will become redundant and can be binned!)
-    platforminfo=platform.linux_distribution() # pylint: disable=deprecated-method
+# (Disabling the pylint error here - this code would only be called if it was 
+# run as a main script)
+    platforminfo=platform.linux_distribution() # pylint: disable=deprecated-method,no-member
     print("platforminfo:")
     print(platforminfo)
 # if we got anything vaguely useful, copy it into distinfo_proto
