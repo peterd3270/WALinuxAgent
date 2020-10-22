@@ -203,7 +203,12 @@ def test():
 # (format of result is (distname,version,id))
 # NB: platform.linux_distribution is deprecated (and will be removed in
 # python 3.8. Suggestion is to use the distro package)
-    platforminfo=platform.linux_distribution()
+# (at coding time, the distro package appears to be even more unstable than platform)
+# pylint complains that linux_distribution() is deprecated
+# (disabling the check: the whole point of this code is to work around deficiencies
+# in the python and debian/devuan distro checking: when these are fixed, this 
+# code will become redundant and can be binned!)
+    platforminfo=platform.linux_distribution() # pylint: disable=deprecated-method
     print("platforminfo:")
     print(platforminfo)
 # if we got anything vaguely useful, copy it into distinfo_proto
