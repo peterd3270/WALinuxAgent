@@ -60,7 +60,7 @@ def _get_osutil(distro_name, distro_code_name, distro_version, distro_full_name)
     if "Clear Linux" in distro_full_name:
         return ClearLinuxUtil()
 # deliberately break it to try to find out why travis is breaking
-    distro_version="99.99"
+#   distro_version="99.99"
 
     if distro_name == "ubuntu":
         if Version(distro_version) in [Version("12.04"), Version("12.10")]: # pylint: disable=R1705

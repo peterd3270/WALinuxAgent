@@ -179,6 +179,8 @@ def check_debian_plain(distinfo=None):
         relfile.close()
         if version == "":
             logger.error("check_debian_plain: unable to find version")
+# insert dummy version to track error
+            version="1234.4321"
         else:
             logger.info("check_debian_plain: Version = '"+version+"'")
     else:
