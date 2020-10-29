@@ -51,6 +51,7 @@ def check_debian_plain(distinfo=None):
 ######################################################################
 #  moving logger import here (travis build problem otherwise)
     import azurelinuxagent.common.logger as logger
+    print("[kilroy] check_debian_plain: entered")
     logger.info("check_debian_plain: entered")
     localdistinfo={
         'ID' : '',
