@@ -21,13 +21,13 @@ matrix:
     - python: 2.7
       env:
         - >-
-          NOSEOPTS="--verbose --with-timer" SETUPOPTS=""
+          NOSEOPTS="--nocapture --verbose --with-timer" SETUPOPTS=""
           PYLINTOPTS="--rcfile=ci/2.7.pylintrc"
           PYLINTFILES="azurelinuxagent setup.py makepkg.py tests"
     - python: 3.4
       env:
         - >-
-          NOSEOPTS="--verbose --with-timer" SETUPOPTS=""
+          NOSEOPTS="--nocapture --verbose --with-timer" SETUPOPTS=""
           PYLINTOPTS="--rcfile=ci/2.7.pylintrc"
           PYLINTFILES="azurelinuxagent setup.py makepkg.py tests"
     - python: 3.6
