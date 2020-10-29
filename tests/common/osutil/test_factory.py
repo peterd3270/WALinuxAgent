@@ -186,7 +186,7 @@ class TestOsUtilFactory(AgentTestCase):
                           distro_code_name="",
                           distro_full_name="",
                           distro_version="2.1")
-        self.assertTrue(type(ret) == DevuanOsUtil)
+        self.assertTrue(type(ret) == DevuanOSUtil)
         self.assertEquals(ret.get_service_name(),"waagent")
 
         ret = _get_osutil(distro_name="devuan",
