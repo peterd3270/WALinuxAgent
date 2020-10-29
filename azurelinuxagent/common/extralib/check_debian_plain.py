@@ -61,11 +61,13 @@ def check_debian_plain(distinfo=None):
     }
 # copy in any data which have already been ascertained:
     for k in localdistinfo.keys():
+        print("[kilroy] k="+k+" val="+distinfo[k])
         if k in distinfo:
             logger.info("check_debian_plain: distinfo."+k+"="+distinfo[k])
 #           localdistinfo['ID']=distinfo[k]
 # fixed bug in above line:
             localdistinfo[k]=distinfo[k]
+            
     aptdir="/var/lib/apt/lists/"
 # (Original intention was to get distid from /etc/issue - but it was
 # decided that /etc/dpkg/origins/default would be safer)
@@ -180,7 +182,8 @@ def check_debian_plain(distinfo=None):
         if version == "":
             logger.error("check_debian_plain: unable to find version")
 # insert dummy version to track error
-            version="1234.4321"
+# (fool it into thinking that we're on ubuntu 12)
+            version="12.04"
         else:
             logger.info("check_debian_plain: Version = '"+version+"'")
     else:
