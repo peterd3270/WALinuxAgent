@@ -26,6 +26,7 @@ from .bigip import BigIpOSUtil
 from .clearlinux import ClearLinuxUtil
 from .coreos import CoreOSUtil
 from .debian import DebianOSBaseUtil, DebianOSModernUtil
+from .devuan import DevuanOSUtil
 from .default import DefaultOSUtil
 from .freebsd import FreeBSDOSUtil
 from .gaia import GaiaOSUtil
@@ -37,6 +38,7 @@ from .redhat import RedhatOSUtil, Redhat6xOSUtil
 from .suse import SUSEOSUtil, SUSE11OSUtil
 from .ubuntu import UbuntuOSUtil, Ubuntu12OSUtil, Ubuntu14OSUtil, \
     UbuntuSnappyOSUtil, Ubuntu16OSUtil, Ubuntu18OSUtil
+from azurelinuxagent.common.extralib.check_debian_plain import check_debian_plain
 
 
 def get_osutil(distro_name=DISTRO_NAME,
@@ -93,10 +95,26 @@ def _get_osutil(distro_name, distro_code_name, distro_version, distro_full_name)
             return SUSEOSUtil()
 
     if distro_name == "debian":
-        if "sid" in distro_version or Version(distro_version) > Version("7"): # pylint: disable=R1705
-            return DebianOSModernUtil()
+# Adding support for devuan (debian without systemd). In devuan ascii (2.1)
+# platform.linux_distribution() returns debian - need to re-check:
+        protodistinfo = {
+            'ID' : distro_name,
+            'RELEASE' : distro_version,
+            'CODENAME' : distro_code_name,
+            'DESCRIPTION' : distro_full_name,
+        }
+        checkeddistinfo = check_debian_plain(protodistinfo)
+        if checkeddistinfo['ID'] == "devuan":
+            return DevuanOSUtil()
         else:
-            return DebianOSBaseUtil()
+            if "sid" in distro_version or Version(distro_version) > Version("7"): # pylint: disable=R1705
+                return DebianOSModernUtil()
+            else:
+                return DebianOSBaseUtil()
+
+# once the issues with devuan detection have been fixed:
+    if distro_name == "devuan":
+        return DevuanOSUtil()
 
     # pylint: disable=R1714
     if distro_name == "redhat" \

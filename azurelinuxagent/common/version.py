@@ -81,7 +81,8 @@ def get_distro():
         release = re.sub('\-.*\Z', '', ustr(platform.release())) # pylint: disable=W1401
         osinfo = ['openbsd', release, '', 'openbsd']
     elif 'Linux' in platform.system():
-        osinfo = get_linux_distribution(0, 'alpine')
+# adding devuan to list of supported distros:
+        osinfo = get_linux_distribution(0, ['alpine','devuan'])
     elif 'NS-BSD' in platform.system():
         release = re.sub('\-.*\Z', '', ustr(platform.release())) # pylint: disable=W1401
         osinfo = ['nsbsd', release, '', 'nsbsd']
@@ -150,6 +151,7 @@ def get_lis_version():
 
 AGENT_NAME = "WALinuxAgent"
 AGENT_LONG_NAME = "Azure Linux Agent"
+# Do we need to change this for devuan-support version?
 AGENT_VERSION = '2.2.52'
 AGENT_LONG_VERSION = "{0}-{1}".format(AGENT_NAME, AGENT_VERSION)
 AGENT_DESCRIPTION = """
