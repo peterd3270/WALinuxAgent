@@ -116,3 +116,7 @@ ignore-docstrings=yes
 
 # Ignore imports when computing similarities.
 ignore-imports=no
+
+# work around pylint complaints about too many local vars and branches
+max-locals=20
+max-branches=25
