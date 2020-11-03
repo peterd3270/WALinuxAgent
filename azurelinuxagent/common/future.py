@@ -92,16 +92,18 @@ def get_linux_distribution(get_full_name, supported_dists):
     except AttributeError:
         return get_linux_distribution_from_distro(get_full_name)
 
+# 2020-11-03 : trying to work out why travis fails with attributeError on
+# version. Trying removing call to check_debian_plain()
 # if platform.linux_distribution reported debian, re-check it: could be devuan
-    if osinfo[0] == "debian":
-        distinfo = {
-            'ID' : osinfo[0],
-            'RELEASE' : osinfo[1],
-            'CODENAME' : 'unknown',
-            'DESCRIPTION' : 'unknown',
-        }
-        distinfo = check_debian_plain(distinfo)
-        osinfo = [ distinfo['ID'], distinfo['RELEASE'], '', distinfo['ID'] ]
+#   if osinfo[0] == "debian":
+#       distinfo = {
+#           'ID' : osinfo[0],
+#           'RELEASE' : osinfo[1],
+#           'CODENAME' : 'unknown',
+#           'DESCRIPTION' : 'unknown',
+#       }
+#       distinfo = check_debian_plain(distinfo)
+#       osinfo = [ distinfo['ID'], distinfo['RELEASE'], '', distinfo['ID'] ]
 
     return osinfo
 
