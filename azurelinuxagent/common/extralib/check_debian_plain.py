@@ -176,6 +176,8 @@ def check_debian_plain(distinfo=None):
 # assemble the speculative filename
 # apparently if it's devuan, the file will end in _InRelease,
 # if debian, _Release. Currently unsure why.
+# 2020-11-03 : apparently it's _InRelease in the case of ubuntu also
+# (travis runs under ubuntu, which is why we need to bear this in mind :( )
 #
 # 3) Get the release from the apt list file
 #
@@ -187,14 +189,29 @@ def check_debian_plain(distinfo=None):
 # initialise version before the following condition - avoid possibility
 # of trying to use it uninitialised
     version=""
-    if os.path.isfile(aptdir+filename):
+# 2020-11-03 : put the release filename in a variable so that we can
+# check for it more conveniently
+    relfilename=os.path.join(aptdir,filename)
+    print('[kilroy] relfilename='+relfilename,file=sys.stderr)
+#   if os.path.isfile(aptdir+filename):
+    if os.path.isfile(relfilename):
+        print('[kilroy] '+relfilename+' apparently exists',file=sys.stderr)
 # now examine the file to get the release.
 # Should be in the first few lines - need a test to avoid having
 # to rummage needlessly through what might be a very big file:
 # - once we've got the line starting "Version:" - stop reading
 # - if we see a line which ends with "Packages" - stop reading
 # REVISIT: this test may not work in all cases.
-        relfile=open(aptdir+filename,"r")
+# 2020-11-03 : weirdness here. Apparently we're getting nonexistent file
+# here, even if os.path.isfile() succeeds.
+#       relfile=open(aptdir+filename,"r")
+# (replacing with io.open - avoid files left open error in python 3)
+        try:
+            relfile=io.open(relfilename,"r")
+        except:
+            print('[kilroy] file '+relfilename+' does NOT exist after all')
+            return distinfo
+
         for line in relfile:
             if re.search('Packages$',line):
                 break
@@ -205,15 +222,15 @@ def check_debian_plain(distinfo=None):
         relfile.close()
         if version == "":
             logger.error("check_debian_plain: unable to find version")
-# insert dummy version to track error
-# (fool it into thinking that we're on ubuntu 12)
-            version="12.04"
         else:
             logger.info("check_debian_plain: Version = '"+version+"'")
     else:
 #       logger.error("check_debian_plain: cannot find file "+relfile)
 # fixed bug in above - trying to output a file handle
         logger.error("check_debian_plain: cannot find file ",aptdir+filename)
+# should give up here and return what we were given
+        return distinfo
+
 #  Update localdistinfo with the results found:
 #  REVISIT: what if our search didn't retrieve information, and
 #  a key in distinfo was already populated?
