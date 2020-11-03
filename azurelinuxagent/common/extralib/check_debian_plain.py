@@ -112,7 +112,11 @@ def check_debian_plain(distinfo=None):
     sline=sline.strip()
     if sline=="":
 # didn't find a "Vendor:" line - give up
-        logger.error("check_debian_plain: did not find a vendor")
+# 2020-11-03 : trying to work out why the test
+#   test_agent_logs_if_extension_log_directory_is_a_file is failing
+# - hypothesis: this code is calling logger.error - so comment them out
+#       logger.error("check_debian_plain: did not find a vendor")
+        print("[kilroy] check_debian_plain: did not find a vendor",file=sys.stderr)
 #       return localdistinfo
 # (try returning distinfo - exactly what we were given)
         return distinfo
@@ -128,7 +132,9 @@ def check_debian_plain(distinfo=None):
     if not os.path.isfile("/etc/apt/sources.list"):
 # no sources.list file - just return what we were given
 #
-        logger.error("check_debian_plain: WARNING: did not find sources.list file")
+# ( - as above)
+#       logger.error("check_debian_plain: WARNING: did not find sources.list file")
+        print("[kilroy] check_debian_plain: WARNING: did not find sources.list file",file=sys.stderr)
 #       return localdistinfo
 # (try returning distinfo - exactly what we were given)
         return distinfo
@@ -155,7 +161,9 @@ def check_debian_plain(distinfo=None):
     sline=sline.strip()
     if sline=="":
 # couldn't find an appropriate line - give up
-        logger.error("check_debian_plain: unable to find useful line in sources.list")
+# ( - as above)
+#       logger.error("check_debian_plain: unable to find useful line in sources.list")
+        print("[kilroy] check_debian_plain: unable to find useful line in sources.list",file=sys.stderr)
 #       return localdistinfo
 # (try returning distinfo - exactly what we were given)
         return distinfo 
@@ -227,7 +235,9 @@ def check_debian_plain(distinfo=None):
                 break
         relfile.close()
         if version == "":
-            logger.error("check_debian_plain: unable to find version")
+# ( - as above)
+#           logger.error("check_debian_plain: unable to find version")
+            print("[kilroy] check_debian_plain: unable to find version",file=sys.stderr)
 # we should probably give up at this point
             return distinfo
 
@@ -237,7 +247,9 @@ def check_debian_plain(distinfo=None):
     else:
 #       logger.error("check_debian_plain: cannot find file "+relfile)
 # fixed bug in above - trying to output a file handle
-        logger.error("check_debian_plain: cannot find file ",aptdir+filename)
+# ( - as above)
+#       logger.error("check_debian_plain: cannot find file "+relfilename)
+        print("check_debian_plain: cannot find file "+relfilename,file=sys.stderr)
 # should give up here and return what we were given
         return distinfo
 
