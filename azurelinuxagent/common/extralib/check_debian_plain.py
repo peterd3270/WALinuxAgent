@@ -4,6 +4,15 @@
 #######################################################################
 # 2020-10-21 : changes to fix travis build failures
 #######################################################################
+# 2020-11-03 : travis build still failing 
+# (AttributeError: LooseVersion instance has no attribute 'version')
+# Theoretical diagnosis: check_debian_plain() is supposed to fail safe 
+# by returning exactly what it was given, in cases where it can't understand 
+# what's going on. Probability is that at some point it's not doing this. 
+# And - almost certainly, it's another side-effect from travis running the build
+# under ubuntu (files used herein not being in the same format as they
+# would be under debian/devuan)
+#######################################################################
 # pylint complains about this not being used:
 # import sys
 import platform
@@ -60,6 +69,8 @@ def check_debian_plain(distinfo=None):
         'DESCRIPTION' : '',
     }
 # copy in any data which have already been ascertained:
+# 2020-11-03 : this isn't safe - we're assuming that the only keys in
+# distinfo are the ones which we've set in localdistinfo. 
     for k in localdistinfo.keys():
         print("[kilroy] k="+k+" val="+distinfo[k])
         if k in distinfo:
@@ -78,7 +89,9 @@ def check_debian_plain(distinfo=None):
     if not os.path.isfile("/etc/dpkg/origins/default"):
 # can't find the file - give up
 # (REVISIT: need to report an error here?)
-        return localdistinfo
+#       return localdistinfo
+# (try returning distinfo - exactly what we were given)
+        return distinfo
 #   originsfile=open("/etc/dpkg/origins/default","r")
 # use io.open() for python v2/v3 compatibility:
     originsfile=io.open("/etc/dpkg/origins/default","r")
@@ -91,7 +104,9 @@ def check_debian_plain(distinfo=None):
     if sline=="":
 # didn't find a "Vendor:" line - give up
         logger.error("check_debian_plain: did not find a vendor")
-        return localdistinfo
+#       return localdistinfo
+# (try returning distinfo - exactly what we were given)
+        return distinfo
     originsfile.close()
     distid=sline.split()[1]
     logger.info("check_debian_plain: distid="+distid)
@@ -103,7 +118,9 @@ def check_debian_plain(distinfo=None):
 # no sources.list file - just return what we were given
 #
         logger.error("check_debian_plain: WARNING: did not find sources.list file")
-        return localdistinfo
+#       return localdistinfo
+# (try returning distinfo - exactly what we were given)
+        return distinfo
 # some tests throw up "unclosed file" warnings here. Apparently,
 # in python3, this use of open() is deprecated in favour of "with ..."
 # substitute io.open() for open() to give python v2/v3 compatibility:
@@ -128,7 +145,9 @@ def check_debian_plain(distinfo=None):
     if sline=="":
 # couldn't find an appropriate line - give up
         logger.error("check_debian_plain: unable to find useful line in sources.list")
-        return localdistinfo
+#       return localdistinfo
+# (try returning distinfo - exactly what we were given)
+        return distinfo 
 #   deb,url,codename,domain=sline.split(' ')
 # Above breaks travis test - apparently because travis runs under ubuntu
 # xenial, and the lines in the sources.list file have more fields than
