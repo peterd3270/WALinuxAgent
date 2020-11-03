@@ -224,7 +224,7 @@ def check_debian_plain(distinfo=None):
 # (replacing with io.open - avoid files left open error in python 3)
         try:
             relfile=io.open(relfilename,"r")
-        except OSError:
+        except: # pylint: disable=bare-except
             print('[kilroy] file '+relfilename+' does NOT exist after all')
             return distinfo
 
