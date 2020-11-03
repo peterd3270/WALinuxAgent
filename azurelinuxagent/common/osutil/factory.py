@@ -20,6 +20,8 @@ from distutils.version import LooseVersion as Version # pylint: disable=no-name-
 
 import azurelinuxagent.common.logger as logger
 from azurelinuxagent.common.version import DISTRO_NAME, DISTRO_CODE_NAME, DISTRO_VERSION, DISTRO_FULL_NAME
+# fixing pylint wibble - moving following import here
+from azurelinuxagent.common.extralib.check_debian_plain import check_debian_plain
 from .alpine import AlpineOSUtil
 from .arch import ArchUtil
 from .bigip import BigIpOSUtil
@@ -38,7 +40,6 @@ from .redhat import RedhatOSUtil, Redhat6xOSUtil
 from .suse import SUSEOSUtil, SUSE11OSUtil
 from .ubuntu import UbuntuOSUtil, Ubuntu12OSUtil, Ubuntu14OSUtil, \
     UbuntuSnappyOSUtil, Ubuntu16OSUtil, Ubuntu18OSUtil
-from azurelinuxagent.common.extralib.check_debian_plain import check_debian_plain
 
 
 def get_osutil(distro_name=DISTRO_NAME,
@@ -108,11 +109,14 @@ def _get_osutil(distro_name, distro_code_name, distro_version, distro_full_name)
         checkeddistinfo = check_debian_plain(protodistinfo)
         if checkeddistinfo['ID'] == "devuan":
             return DevuanOSUtil()
+
+# fixing pylint wibble about unnecessary else
+#       else:
+        if "sid" in distro_version or Version(distro_version) > Version("7"): # pylint: disable=R1705
+            return DebianOSModernUtil()
+# (wonder why pylint isn't moaning about the following else:)
         else:
-            if "sid" in distro_version or Version(distro_version) > Version("7"): # pylint: disable=R1705
-                return DebianOSModernUtil()
-            else:
-                return DebianOSBaseUtil()
+            return DebianOSBaseUtil()
 
 # once the issues with devuan detection have been fixed:
     if distro_name == "devuan":

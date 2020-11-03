@@ -18,19 +18,22 @@
 # devuan.py - support the devuan distro (debian without systemd)
 ##########################################################################
 
-import os
-import re
-import pwd
-import shutil
-import socket
-import array
-import struct
-import fcntl
-import time
-import base64
+# fixing pylint wibbles about unused imports
+# (think these were all from the original code, where the devuan/debian
+# check was done in here)
+# import os
+# import re
+# import pwd
+# import shutil
+# import socket
+# import array
+# import struct
+# import fcntl
+# import time
+# import base64
 import azurelinuxagent.common.logger as logger
-import azurelinuxagent.common.utils.fileutil as fileutil
-import azurelinuxagent.common.utils.shellutil as shellutil
+# import azurelinuxagent.common.utils.fileutil as fileutil
+# import azurelinuxagent.common.utils.shellutil as shellutil
 import azurelinuxagent.common.utils.textutil as textutil
 from azurelinuxagent.common.osutil.default import DefaultOSUtil
 

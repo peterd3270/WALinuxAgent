@@ -63,7 +63,9 @@ def check_debian_plain(distinfo=None):
 #   - need to figure out how to alert to / log an error condition
 ######################################################################
 #  moving logger import here (travis build problem otherwise)
-    import azurelinuxagent.common.logger as logger
+# (currently all logger statements are commented out - 
+# commenting this out also to keep pylint from whining)
+#    import azurelinuxagent.common.logger as logger
 #   print("[kilroy] check_debian_plain: entered")
 # (apparently logger.info borks the travis tests, because it grabs the
 # output and treats it as a test result)
@@ -222,7 +224,7 @@ def check_debian_plain(distinfo=None):
 # (replacing with io.open - avoid files left open error in python 3)
         try:
             relfile=io.open(relfilename,"r")
-        except:
+        except OSError:
             print('[kilroy] file '+relfilename+' does NOT exist after all')
             return distinfo
 

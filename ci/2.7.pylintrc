@@ -124,3 +124,4 @@ ignore-imports=no
 # override locals and branches check
 max-locals=20
 max-branches=21
+max-returns=10
