@@ -15,6 +15,8 @@
 #######################################################################
 # pylint complains about this not being used:
 # import sys
+# trying to print to stderr to dodge test grabbing stdout:
+from __future__ import print_function
 import platform
 import os
 import re
@@ -23,6 +25,8 @@ import io
 # for some reason this breaks travis builds (works in local builds)
 # move to inside check_debian_plain() - seems to work then.
 # from azurelinuxagent.common import logger
+
+import sys
 
 # def check_debian_plain(distinfo={}):
 # fix pylint complaint about "dangerous default"
@@ -72,7 +76,8 @@ def check_debian_plain(distinfo=None):
 # 2020-11-03 : this isn't safe - we're assuming that the only keys in
 # distinfo are the ones which we've set in localdistinfo. 
     for k in localdistinfo.keys():
-        print("[kilroy] k="+k+" val="+distinfo[k])
+# (print to STDERR - try to dodge test's grabbing of STDOUT)
+        print("[kilroy] k="+k+" val="+distinfo[k],file=sys.stderr)
         if k in distinfo:
             logger.info("check_debian_plain: distinfo."+k+"="+distinfo[k])
 #           localdistinfo['ID']=distinfo[k]
