@@ -65,7 +65,9 @@ def check_debian_plain(distinfo=None):
 #  moving logger import here (travis build problem otherwise)
     import azurelinuxagent.common.logger as logger
 #   print("[kilroy] check_debian_plain: entered")
-    logger.info("check_debian_plain: entered")
+# (apparently logger.info borks the travis tests, because it grabs the
+# output and treats it as a test result)
+#   logger.info("check_debian_plain: entered")
     localdistinfo={
         'ID' : '',
         'RELEASE' : '',
@@ -79,7 +81,8 @@ def check_debian_plain(distinfo=None):
 # (print to STDERR - try to dodge test's grabbing of STDOUT)
         print("[kilroy] k="+k+" val="+distinfo[k],file=sys.stderr)
         if k in distinfo:
-            logger.info("check_debian_plain: distinfo."+k+"="+distinfo[k])
+# (see above)
+#           logger.info("check_debian_plain: distinfo."+k+"="+distinfo[k])
 #           localdistinfo['ID']=distinfo[k]
 # fixed bug in above line:
             localdistinfo[k]=distinfo[k]
@@ -97,6 +100,7 @@ def check_debian_plain(distinfo=None):
 #       return localdistinfo
 # (try returning distinfo - exactly what we were given)
         return distinfo
+
 #   originsfile=open("/etc/dpkg/origins/default","r")
 # use io.open() for python v2/v3 compatibility:
     originsfile=io.open("/etc/dpkg/origins/default","r")
@@ -114,7 +118,9 @@ def check_debian_plain(distinfo=None):
         return distinfo
     originsfile.close()
     distid=sline.split()[1]
-    logger.info("check_debian_plain: distid="+distid)
+    print('[kilroy] distid='+distid,file=sys.stderr)
+# see above re. logger.info
+#   logger.info("check_debian_plain: distid="+distid)
 #
 # 2) Get the release file from /etc/apt/sources.list
 # (use the first line starting with "deb")
@@ -222,8 +228,12 @@ def check_debian_plain(distinfo=None):
         relfile.close()
         if version == "":
             logger.error("check_debian_plain: unable to find version")
-        else:
-            logger.info("check_debian_plain: Version = '"+version+"'")
+# we should probably give up at this point
+            return distinfo
+
+        print('[kilroy] version = '+version,file=sys.stderr)
+# see above re. logger.info breaking tests
+#       logger.info("check_debian_plain: Version = '"+version+"'")
     else:
 #       logger.error("check_debian_plain: cannot find file "+relfile)
 # fixed bug in above - trying to output a file handle
