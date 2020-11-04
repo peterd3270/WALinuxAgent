@@ -81,8 +81,8 @@ def check_debian_plain(distinfo=None):
 # distinfo are the ones which we've set in localdistinfo. 
     for k in localdistinfo.keys():
 # (print to STDERR - try to dodge test's grabbing of STDOUT)
-        print("[kilroy] k="+k+" val="+distinfo[k],file=sys.stderr)
         if k in distinfo:
+            print("[kilroy] k="+k+" val="+distinfo[k],file=sys.stderr)
 # (see above)
 #           logger.info("check_debian_plain: distinfo."+k+"="+distinfo[k])
 #           localdistinfo['ID']=distinfo[k]
