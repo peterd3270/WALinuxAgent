@@ -132,6 +132,10 @@ class DebianRecheck:
 #       logger.info("check_debian_plain: distid="+distid)
         self.sourcedata['id']=distid
 
+    def dump_tokenlist(self,tokenlist):
+        self.localdbg("tokenlist:")
+        for i in range(len(tokenlist)):
+            self.localdbg(str(i)+" => "+tokenlist[i])
 
     def find_sourcedata(self):
 # extract dist/version/release data from sources.list entry
@@ -157,6 +161,7 @@ class DebianRecheck:
                 self.localdbg("[kilroy] check_debian_plain: unable to find useful line in sources.list")
             else:
                 tokenlist=sline.split(' ')
+                self.dump_tokenlist(tokenlist)
                 self.sourcedata['url']=tokenlist[1]
                 self.sourcedata['codename']=tokenlist[2]
                 self.sourcedata['domain']=tokenlist[3]
