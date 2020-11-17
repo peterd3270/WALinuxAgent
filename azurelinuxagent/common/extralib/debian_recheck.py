@@ -76,6 +76,9 @@ class DebianRecheck:
 # report error: unable to find version
 # fail gracefully - return what we were given
                     self.localdbg("Unable to find version")
+# Need to retain what we were given for RELEASE - otherwise we'll hit the
+# horrible version attribute error problem:
+                    self.sourcedata['version']=distinfo['RELEASE']
 
         self.dump_sourcedata()
 
