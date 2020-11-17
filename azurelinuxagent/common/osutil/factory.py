@@ -21,7 +21,9 @@ from distutils.version import LooseVersion as Version # pylint: disable=no-name-
 import azurelinuxagent.common.logger as logger
 from azurelinuxagent.common.version import DISTRO_NAME, DISTRO_CODE_NAME, DISTRO_VERSION, DISTRO_FULL_NAME
 # fixing pylint wibble - moving following import here
-from azurelinuxagent.common.extralib.check_debian_plain import check_debian_plain
+# from azurelinuxagent.common.extralib.check_debian_plain import check_debian_plain
+from azurelinuxagent.common.extralib.debian_recheck import DebianRecheck
+
 from .alpine import AlpineOSUtil
 from .arch import ArchUtil
 from .bigip import BigIpOSUtil
@@ -106,8 +108,10 @@ def _get_osutil(distro_name, distro_code_name, distro_version, distro_full_name)
             'CODENAME' : distro_code_name,
             'DESCRIPTION' : distro_full_name,
         }
-        checkeddistinfo = check_debian_plain(protodistinfo)
-        if checkeddistinfo['ID'] == "devuan":
+#       checkeddistinfo = check_debian_plain(protodistinfo)
+#       if checkeddistinfo['ID'] == "devuan":
+        recheck=DebianRecheck(protodistinfo)
+        if recheck.get_id() == "devuan":
             return DevuanOSUtil()
 
 # fixing pylint wibble about unnecessary else

@@ -3,7 +3,8 @@ import sys
 import os
 import re
 
-from azurelinuxagent.common.extralib.check_debian_plain import check_debian_plain
+# from azurelinuxagent.common.extralib.check_debian_plain import check_debian_plain
+from azurelinuxagent.common.extralib.debian_recheck import DebianRecheck
 
 # Note broken dependency handling to avoid potential backward
 # compatibility issues on different distributions
@@ -97,14 +98,17 @@ def get_linux_distribution(get_full_name, supported_dists):
 # (putting it back now - maybe got to the bottom of probs in check_debian_plain()
 # if platform.linux_distribution reported debian, re-check it: could be devuan
     if osinfo[0] == "debian":
+# copy to dictionary to make more manageable:
         distinfo = {
             'ID' : osinfo[0],
             'RELEASE' : osinfo[1],
             'CODENAME' : 'unknown',
             'DESCRIPTION' : 'unknown',
         }
-        distinfo = check_debian_plain(distinfo)
-        osinfo = [ distinfo['ID'], distinfo['RELEASE'], '', distinfo['ID'] ]
+#       distinfo = check_debian_plain(distinfo)
+#       osinfo = [ distinfo['ID'], distinfo['RELEASE'], '', distinfo['ID'] ]
+        recheck=DebianRecheck(distinfo)
+        osinfo = [ recheck.get_id(), recheck.get_release(), '', recheck.get_id() ]
 
     return osinfo
 
