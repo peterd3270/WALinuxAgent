@@ -82,6 +82,9 @@ def get_linux_distribution(get_full_name, supported_dists):
                 supported_dists=supported
             )
         )
+        print("osinfo: ",file=sys.stderr)
+        for i in range(len(osinfo)):
+            print(str(i)+" => "+osinfo[i],file=sys.stderr)
 
         # The platform.linux_distribution() lib has issue with detecting OpenWRT linux distribution.
         # Merge the following patch provided by OpenWRT as a temporary fix.
@@ -89,10 +92,12 @@ def get_linux_distribution(get_full_name, supported_dists):
             osinfo = get_openwrt_platform()
 
         if not osinfo or osinfo == ['', '', '']:
+            print("osinfo blank: falling back on get_linux_distribution_from_distro",file=sys.stderr)
             return get_linux_distribution_from_distro(get_full_name)
         full_name = platform.linux_distribution()[0].strip() # pylint: disable=W1505
         osinfo.append(full_name)
     except AttributeError:
+        print("AttributeError: falling back on get_linux_distribution_from_distro()",file=sys.stderr)
         return get_linux_distribution_from_distro(get_full_name)
 
 # 2020-11-03 : trying to work out why travis fails with attributeError on
@@ -102,9 +107,6 @@ def get_linux_distribution(get_full_name, supported_dists):
     if osinfo[0] == "debian":
 # copy to dictionary to make more manageable:
 # Trying to find out what's in osinfo at this point:
-        print("osinfo: ",file=sys.stderr)
-        for i in range(len(osinfo)):
-            print(str(i)+" => "+osinfo[i],file=sys.stderr)
 
         distinfo = {
             'ID' : osinfo[0],
