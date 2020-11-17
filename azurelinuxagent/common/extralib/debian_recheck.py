@@ -18,7 +18,7 @@ import sys
 
 class DebianRecheck:
 
-    debugfl=0
+    debugfl=1
 
     localdistinfo={
         'ID' : '',
