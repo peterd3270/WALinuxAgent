@@ -113,8 +113,8 @@ class DebianRecheck:
 
         try: 
             originsfile=io.open(originsfilename,'r')
-        except:
-            return distid
+        except: # pylint: disable bare-except
+            return 
 
         for line in originsfile:
             if re.search("^Vendor:",line):
@@ -124,7 +124,7 @@ class DebianRecheck:
         if sline=="":
 #           logger.error("check_debian_plain: did not find a vendor")
             self.localdbg("[kilroy] check_debian_plain: did not find a vendor")
-            return distid
+            return 
 
         originsfile.close()
         distid=sline.split()[1]
@@ -134,7 +134,7 @@ class DebianRecheck:
 
     def dump_tokenlist(self,tokenlist):
         self.localdbg("tokenlist:")
-        for i in range(len(tokenlist)):
+        for i in range(len(tokenlist)): # pylint: disable consider-using-enumerate
             self.localdbg(str(i)+" => "+tokenlist[i])
 
     def find_sourcedata(self):
@@ -169,7 +169,7 @@ class DebianRecheck:
                 parts=re.search(r'^http://(.*?)/(.*)',self.sourcedata['url'])
                 self.sourcedata['host']=parts.group(1)
                 tmpsect=parts.group(2)
-                self.localdbg("tmpsect="+tmpsect);
+                self.localdbg("tmpsect="+tmpsect)
 # remove trailing backslash if exists
                 if re.search(r'/$',tmpsect):
 # (need to test that the following will work)
