@@ -104,7 +104,8 @@ def get_linux_distribution(get_full_name, supported_dists):
 # version. Trying removing call to check_debian_plain()
 # (putting it back now - maybe got to the bottom of probs in check_debian_plain()
 # if platform.linux_distribution reported debian, re-check it: could be devuan
-#   if osinfo[0] == "debian":
+    if osinfo[0] == "debian":
+        print("future.get_linux_distribution: debian returned - about to re-check",file=sys.stderr)
 # copy to dictionary to make more manageable:
 # Trying to find out what's in osinfo at this point:
 
