@@ -1,7 +1,9 @@
+from __future__ import print_function
 import platform
 import sys
 import os
 import re
+
 
 # from azurelinuxagent.common.extralib.check_debian_plain import check_debian_plain
 from azurelinuxagent.common.extralib.debian_recheck import DebianRecheck
@@ -99,6 +101,11 @@ def get_linux_distribution(get_full_name, supported_dists):
 # if platform.linux_distribution reported debian, re-check it: could be devuan
     if osinfo[0] == "debian":
 # copy to dictionary to make more manageable:
+# Trying to find out what's in osinfo at this point:
+        print("osinfo: ",file=sys.stderr)
+        for i in range(len(osinfo)):
+            print(str(i)+" => "+osinfo[i],file=sys.stderr)
+
         distinfo = {
             'ID' : osinfo[0],
             'RELEASE' : osinfo[1],
