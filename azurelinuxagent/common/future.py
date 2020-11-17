@@ -109,16 +109,26 @@ def get_linux_distribution(get_full_name, supported_dists):
 # copy to dictionary to make more manageable:
 # Trying to find out what's in osinfo at this point:
 
-#       distinfo = {
-#           'ID' : osinfo[0],
-#           'RELEASE' : osinfo[1],
-#           'CODENAME' : 'unknown',
-#           'DESCRIPTION' : 'unknown',
-#       }
+        distinfo = {
+            'ID' : osinfo[0],
+            'RELEASE' : osinfo[1],
+            'CODENAME' : 'unknown',
+            'DESCRIPTION' : 'unknown',
+        }
 #       distinfo = check_debian_plain(distinfo)
 #       osinfo = [ distinfo['ID'], distinfo['RELEASE'], '', distinfo['ID'] ]
-#       recheck=DebianRecheck(distinfo)
-#       osinfo = [ recheck.get_id(), recheck.get_release(), '', recheck.get_id() ]
+        recheck=DebianRecheck(distinfo)
+# still trying to work out what I'm doing to osinfo
+        dummyosinfo = [ recheck.get_id(), recheck.get_release(), '', recheck.get_id() ]
+# now compare them:
+        print("future.get_linux_distribution: dummyosinfo:",file=sys.stderr)
+        for i in range(len(dummyosinfo)):
+            print(str(i)+" => "+dummyosinfo[i],file=sys.stderr) 
+
+        print("future.get_linux_distribution: osinfo:",file=sys.stderr)
+        for i in range(len(osinfo)):
+            print(str(i)+" => "+osinfo[i],file=sys.stderr) 
+
 
     return osinfo
 
