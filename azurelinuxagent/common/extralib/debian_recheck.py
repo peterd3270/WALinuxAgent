@@ -113,7 +113,7 @@ class DebianRecheck:
 
         try: 
             originsfile=io.open(originsfilename,'r')
-        except: # pylint: disable bare-except
+        except: # pylint: disable=bare-except
             return 
 
         for line in originsfile:
@@ -134,7 +134,7 @@ class DebianRecheck:
 
     def dump_tokenlist(self,tokenlist):
         self.localdbg("tokenlist:")
-        for i in range(len(tokenlist)): # pylint: disable consider-using-enumerate
+        for i in range(len(tokenlist)): # pylint: disable=consider-using-enumerate
             self.localdbg(str(i)+" => "+tokenlist[i])
 
     def find_sourcedata(self):

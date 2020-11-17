@@ -6,7 +6,7 @@ import re
 
 
 # from azurelinuxagent.common.extralib.check_debian_plain import check_debian_plain
-from azurelinuxagent.common.extralib.debian_recheck import DebianRecheck # pylint: disable unused-import
+from azurelinuxagent.common.extralib.debian_recheck import DebianRecheck # pylint: disable=unused-import
 
 # Note broken dependency handling to avoid potential backward
 # compatibility issues on different distributions
