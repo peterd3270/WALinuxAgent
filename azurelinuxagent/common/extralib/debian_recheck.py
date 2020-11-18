@@ -115,6 +115,7 @@ class DebianRecheck():
         self.dump_sourcedata()
 
         if self.sourcedata['ok'] == 1:
+            self.localdbg("ok == 1 - updating localdistinfo")
             self.localdistinfo['ID'] = self.sourcedata['id']
 # REVISIT: need to sort out version/release etc.
 # version should be major; release should be minor
