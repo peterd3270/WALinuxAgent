@@ -256,7 +256,7 @@ self.sourcedata['codename']+')'
         """
         self.localdbg("sourcedata - current contents - START -")
         for k in self.sourcedata.keys():
-            self.localdbg('    '+str(k)+' : '+self.sourcedata[k])
+            self.localdbg('    '+str(k)+' : '+str(self.sourcedata[k]))
 
         self.localdbg("sourcedata - current contents - END   -")
 
