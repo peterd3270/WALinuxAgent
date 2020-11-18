@@ -91,7 +91,7 @@ class DebianRecheck():
         if self.sourcedata['ok'] == 0:
 # report error: unable to find distribution id
 # fail gracefully - return what we were given
-            self.localdbg("Unable to find distribution id")
+            self.localdbg("ERROR: Unable to find distribution id")
         else:
             self.find_sourcedata()
             self.dump_sourcedata()
@@ -100,17 +100,18 @@ class DebianRecheck():
             if self.sourcedata['relfilename'] == "":
 # report error: unable to find release file
 # fail gracefully - return what we were given
-                self.localdbg('[kilroy] unable to find release file - giving up')
+                self.localdbg('ERROR: unable to find release file - giving up')
+                self.sourcedata['ok'] = 0
             else:
                 self.find_version()
                 self.dump_sourcedata()
                 if self.sourcedata['version'] == "":
 # report error: unable to find version
 # fail gracefully - return what we were given
-                    self.localdbg("Unable to find version")
-# Need to retain what we were given for RELEASE - otherwise we'll hit the
-# horrible version attribute error problem:
-                    self.sourcedata['version'] = distinfo['RELEASE']
+                    self.localdbg("ERROR: Unable to find version")
+#                   self.sourcedata['version'] = distinfo['RELEASE']
+# (just set sourcedata flag to 0 - fix later)
+                    self.sourcedata['ok'] = 0
 
         self.dump_sourcedata()
 
