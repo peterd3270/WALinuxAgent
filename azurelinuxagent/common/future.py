@@ -107,16 +107,12 @@ def get_linux_distribution(get_full_name, supported_dists):
     if osinfo[0] == "debian":
         print("future.get_linux_distribution: debian returned - about to re-check",file=sys.stderr)
 # copy to dictionary to make more manageable:
-# Trying to find out what's in osinfo at this point:
-
         distinfo = {
             'ID' : osinfo[0],
             'RELEASE' : osinfo[1],
             'CODENAME' : 'unknown',
             'DESCRIPTION' : 'unknown',
         }
-#       distinfo = check_debian_plain(distinfo)
-#       osinfo = [ distinfo['ID'], distinfo['RELEASE'], '', distinfo['ID'] ]
         recheck=DebianRecheck(distinfo)
 # still trying to work out what I'm doing to osinfo
         dummyosinfo = [ recheck.get_id(), recheck.get_release(), '', recheck.get_id() ]
@@ -129,6 +125,8 @@ def get_linux_distribution(get_full_name, supported_dists):
         for i in range(len(osinfo)):
             print(str(i)+" => "+osinfo[i],file=sys.stderr) 
 
+# OK let's go for broke and see what happens -
+        osinfo = [ recheck.get_id(), recheck.get_release(), '', recheck.get_id() ]
 
     return osinfo
 
