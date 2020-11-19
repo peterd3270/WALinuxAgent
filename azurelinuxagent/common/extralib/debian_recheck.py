@@ -187,13 +187,13 @@ self.sourcedata['codename']+')'
         sline = sline.strip()
         if sline == "":
 #           logger.error("check_debian_plain: did not find a vendor")
-            self.localdbg("[kilroy] check_debian_plain: did not find a vendor")
+            self.localdbg("ERROR: did not find a vendor")
             self.sourcedata['ok'] = 0
             return
 
         originsfile.close()
         distid = sline.split()[1]
-        self.localdbg('[kilroy] distid='+distid)
+        self.localdbg('distid='+distid)
 #       logger.info("check_debian_plain: distid="+distid)
         self.sourcedata['id'] = distid
 
@@ -213,7 +213,7 @@ self.sourcedata['codename']+')'
 # extract dist/version/release data from sources.list entry
         if not os.path.isfile("/etc/apt/sources.list"):
 #           logger.error("check_debian_plain: WARNING: did not find sources.list file")
-            self.localdbg("[kilroy] check_debian_plain: WARNING: did not find sources.list file")
+            self.localdbg("ERROR: did not find sources.list file")
             self.sourcedata['ok'] = 0
         else:
             slfile = io.open("/etc/apt/sources.list", "r")
@@ -231,8 +231,8 @@ self.sourcedata['codename']+')'
             sline = sline.strip()
             if sline == "":
 #               logger.error("check_debian_plain: unable to find useful line in sources.list")
-                self.localdbg("[kilroy] check_debian_plain: "+\
-"unable to find useful line in sources.list")
+                self.localdbg("ERROR: unable to "+\
+"find required line in sources.list")
                 self.sourcedata['ok'] = 0
             else:
                 tokenlist = sline.split(' ')
@@ -296,10 +296,15 @@ self.sourcedata['section']+\
                 if os.path.isfile(testfilename):
                     relfilename = testfilename
                 else:
-                    self.localdbg('[kilroy] no release file found')
+                    self.localdbg('ERROR: no release file found')
 
-        self.localdbg('[kilroy] relfilename='+relfilename)
-        self.sourcedata['relfilename'] = relfilename
+        if relfilename != "":
+            self.localdbg('relfilename = '+relfilename)
+            self.sourcedata['relfilename'] = relfilename
+        else:
+            self.localdbg("ERROR: failed to find release file")
+            self.sourcedata['relfilename'] = ""
+            self.sourcedata['ok'] = 0
 
     def find_version(self):
         """
@@ -311,8 +316,9 @@ self.sourcedata['section']+\
         try:
             relfile = io.open(self.sourcedata['relfilename'], "r")
         except: # pylint: disable=bare-except
-            self.localdbg('[kilroy] file '+self.sourcedata['relfilename']+\
-' does NOT exist after all')
+            self.localdbg('ERROR: release file '+\
+self.sourcedata['relfilename']+\
+' cannot be opened for reading')
             self.sourcedata['ok'] = 0
             return
 
@@ -328,7 +334,7 @@ self.sourcedata['section']+\
 
         if self.sourcedata['version'] == "":
 #           logger.error("check_debian_plain: unable to find version")
-            self.localdbg("[kilroy] check_debian_plain: unable to find version")
+            self.localdbg("ERROR: unable to find version")
             self.sourcedata['ok'] = 0
 
 def test():
